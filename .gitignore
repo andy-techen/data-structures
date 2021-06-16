@@ -1,0 +1,9 @@
+.idea/
+*.py
+*.cpp
+*.class
+*.kt
+*.iml
+*.pdf
+**/tests/
+out/
