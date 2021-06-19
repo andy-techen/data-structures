@@ -23,26 +23,57 @@ public class tree_height {
 	public class TreeHeight {
 		int n;
 		int parent[];
+		int heights[];  // add heights array to store heights and avoid stack overflow
 		
 		void read() throws IOException {
 			FastScanner in = new FastScanner();
 			n = in.nextInt();
 			parent = new int[n];
+			heights = new int[n];
 			for (int i = 0; i < n; i++) {
 				parent[i] = in.nextInt();
 			}
 		}
 
+//        //  Replace this code with a faster implementation
+//		int computeHeight() {
+//			int maxHeight = 0;
+//			for (int vertex = 0; vertex < n; vertex++) {
+//				int height = 0;
+//				for (int i = vertex; i != -1; i = parent[i]) {
+//					height++;
+//				}
+//				maxHeight = Math.max(maxHeight, height);
+//			}
+//			return maxHeight;
+//		}
+
 		int computeHeight() {
-                        // Replace this code with a faster implementation
 			int maxHeight = 0;
 			for (int vertex = 0; vertex < n; vertex++) {
-				int height = 0;
-				for (int i = vertex; i != -1; i = parent[i])
-					height++;
+				// if vertex not yet measured, getHeight(vertex)
+				if (heights[vertex] == 0) {
+					heights[vertex] = getHeight(vertex);
+				}
+				int height = heights[vertex];
 				maxHeight = Math.max(maxHeight, height);
 			}
+
 			return maxHeight;
+		}
+
+		int getHeight(int i) {
+			// if subtree not yet measured, calculate and save its height to the heights array
+			if (heights[i] == 0) {
+				int parentNode = parent[i];  // save to parentNode
+				if (parentNode == -1) {  // if parentNode is the root, save height as 1
+					heights[i] = 1;
+					return 1;
+				}
+				// basically, if parentNode isn't the root, add height by 1
+				heights[i] = getHeight(parentNode) + 1;
+			}
+			return heights[i];
 		}
 	}
 
