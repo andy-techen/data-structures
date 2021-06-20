@@ -31,7 +31,7 @@ public class BuildHeap {
     }
 
     private void generateSwaps() {
-      swaps = new ArrayList<Swap>();
+      swaps = new ArrayList<Swap>();  // save swap history
       // The following naive implementation just sorts 
       // the given sequence using selection sort algorithm
       // and saves the resulting sequence of swaps.
@@ -39,16 +39,43 @@ public class BuildHeap {
       // but in the worst case gives a quadratic number of swaps.
       //
       // TODO: replace by a more efficient implementation
-      for (int i = 0; i < data.length; ++i) {
-        for (int j = i + 1; j < data.length; ++j) {
-          if (data[i] > data[j]) {
-            swaps.add(new Swap(i, j));
-            int tmp = data[i];
-            data[i] = data[j];
-            data[j] = tmp;
-          }
+//      for (int i = 0; i < data.length; ++i) {
+//        for (int j = i + 1; j < data.length; ++j) {
+//          if (data[i] > data[j]) {
+//            swaps.add(new Swap(i, j));
+//            int tmp = data[i];
+//            data[i] = data[j];
+//            data[j] = tmp;
+//          }
+//        }
+//      }
+        for (int i = data.length / 2 - 1; i >= 0; i--) {  // zero-based indexing
+            siftDown(i);
         }
-      }
+    }
+
+    private void siftDown(int i) {
+        int minIndex = i;
+        int lIndex = 2 * i + 1;  // left child
+        int rIndex = 2 * i + 2;  // right child
+        if (lIndex < data.length && data[lIndex] < data[minIndex]) {
+            // left child smaller than root, make lIndex minIndex
+            minIndex = lIndex;
+        }
+        if (rIndex < data.length && data[rIndex] < data[minIndex]) {
+            // right child smaller than root, make rIndex minIndex
+            minIndex = rIndex;
+        }
+        if (minIndex != i) {
+            // if minIndex is not smallest
+            swaps.add(new Swap(i, minIndex));
+
+            // save sorted heap back into data
+            int tmp = data[i];
+            data[i] = data[minIndex];
+            data[minIndex] = tmp;
+            siftDown(minIndex);
+        }
     }
 
     public void solve() throws IOException {
