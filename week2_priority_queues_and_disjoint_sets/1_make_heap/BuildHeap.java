@@ -31,7 +31,7 @@ public class BuildHeap {
     }
 
     private void generateSwaps() {
-      swaps = new ArrayList<Swap>();  // save swap history
+        swaps = new ArrayList<Swap>();  // save swap history
       // The following naive implementation just sorts 
       // the given sequence using selection sort algorithm
       // and saves the resulting sequence of swaps.
