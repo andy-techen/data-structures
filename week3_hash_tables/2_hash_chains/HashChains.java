@@ -9,7 +9,7 @@ public class HashChains {
     private FastScanner in;
     private PrintWriter out;
     // store all strings in one list
-    private List<String> elems;
+    private ArrayList<String>[] elems;
     // for hash function
     private int bucketCount;
     private int prime = 1000000007;
@@ -40,29 +40,48 @@ public class HashChains {
     private void writeSearchResult(boolean wasFound) {
         out.println(wasFound ? "yes" : "no");
         // Uncomment the following if you want to play with the program interactively.
-        // out.flush();
+         out.flush();
     }
 
     private void processQuery(Query query) {
+        int hash;
+
         switch (query.type) {
             case "add":
-                if (!elems.contains(query.s))
-                    elems.add(0, query.s);
+                hash = hashFunc(query.s);
+                if (elems[hash] == null) {
+                    elems[hash] = new ArrayList<>();
+                    elems[hash].add(0, query.s);
+                }
+                if (!elems[hash].contains(query.s)) {
+                    elems[hash].add(0, query.s);
+                }
                 break;
             case "del":
-                if (elems.contains(query.s))
-                    elems.remove(query.s);
+                hash = hashFunc(query.s);
+                if (elems[hash] != null) {
+                    if (elems[hash].contains(query.s)) {
+                        elems[hash].remove(query.s);
+                    }
+                }
                 break;
             case "find":
-                writeSearchResult(elems.contains(query.s));
+                hash = hashFunc(query.s);
+                boolean wasFound = false;
+                if ((elems[hash] != null ) && elems[hash].contains(query.s)) {
+                    wasFound = true;
+                }
+                writeSearchResult(wasFound);
                 break;
             case "check":
-                for (String cur : elems)
-                    if (hashFunc(cur) == query.ind)
+                if (elems[query.ind] != null) {
+                    for (String cur : elems[query.ind]) {
                         out.print(cur + " ");
+                    }
+                }
                 out.println();
                 // Uncomment the following if you want to play with the program interactively.
-                // out.flush();
+                 out.flush();
                 break;
             default:
                 throw new RuntimeException("Unknown query: " + query.type);
@@ -70,10 +89,10 @@ public class HashChains {
     }
 
     public void processQueries() throws IOException {
-        elems = new ArrayList<>();
         in = new FastScanner();
         out = new PrintWriter(new BufferedOutputStream(System.out));
         bucketCount = in.nextInt();
+        elems = new ArrayList[bucketCount];
         int queryCount = in.nextInt();
         for (int i = 0; i < queryCount; ++i) {
             processQuery(readQuery());
