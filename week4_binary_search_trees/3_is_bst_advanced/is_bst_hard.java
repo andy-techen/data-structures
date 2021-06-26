@@ -22,11 +22,11 @@ public class is_bst_hard {
 
     public class IsBST {
         class Node {
-            int key;
+            long key;
             int left;
             int right;
 
-            Node(int key, int left, int right) {
+            Node(long key, int left, int right) {
                 this.left = left;
                 this.right = right;
                 this.key = key;
@@ -45,9 +45,29 @@ public class is_bst_hard {
             }
         }
 
-        boolean isBinarySearchTree() {
-          // Implement correct algorithm here
-          return true;
+        boolean solve() {
+            if (nodes == 0) {
+                return true;
+            }
+            return isBST(tree[0], Long.MIN_VALUE, Long.MAX_VALUE);
+        }
+
+        private boolean isBST(Node root, long min, long max) {  // int type overflows in test case
+            // Implement correct algorithm here
+            if (root.key < min || root.key > max) {
+                return false;
+            }
+            if (root.left == -1 && root.right == -1) {
+                return true;
+            }
+            if (root.left == -1) {
+                return isBST(tree[root.right], root.key, max);
+            }
+            if (root.right == -1) {
+                return isBST(tree[root.left], min, root.key - 1);
+            }
+            return (isBST(tree[root.left], min, root.key - 1) &&
+                    isBST(tree[root.right], root.key, max));
         }
     }
 
