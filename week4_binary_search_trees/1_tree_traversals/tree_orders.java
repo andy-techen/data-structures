@@ -24,6 +24,7 @@ public class tree_orders {
 	public class TreeOrders {
 		int n;
 		int[] key, left, right;
+		ArrayList<Integer> result;
 		
 		void read() throws IOException {
 			FastScanner in = new FastScanner();
@@ -38,26 +39,56 @@ public class tree_orders {
 			}
 		}
 
+		private void inTraversal(int node) {
+			if (node == -1) {
+				return;
+			}
+			inTraversal(left[node]);
+			result.add(key[node]);
+			inTraversal(right[node]);
+		}
+
 		List<Integer> inOrder() {
-			ArrayList<Integer> result = new ArrayList<Integer>();
-                        // Finish the implementation
-                        // You may need to add a new recursive method to do that
-                        
+			result = new ArrayList<Integer>();
+            // Finish the implementation
+            // You may need to add a new recursive method to do that
+			inTraversal(0);
+
 			return result;
+		}
+
+		private void preTraversal(int node) {
+			if (node == -1) {
+				return;
+			}
+			result.add(key[node]);
+			preTraversal(left[node]);
+			preTraversal(right[node]);
 		}
 
 		List<Integer> preOrder() {
-			ArrayList<Integer> result = new ArrayList<Integer>();
-                        // Finish the implementation
-                        // You may need to add a new recursive method to do that
-                        
+			result = new ArrayList<Integer>();
+            // Finish the implementation
+			// You may need to add a new recursive method to do that
+			preTraversal(0);
+
 			return result;
 		}
 
+		private void postTraversal(int node) {
+			if (node == -1) {
+				return;
+			}
+			postTraversal(left[node]);
+			postTraversal(right[node]);
+			result.add(key[node]);
+		}
+
 		List<Integer> postOrder() {
-			ArrayList<Integer> result = new ArrayList<Integer>();
-                        // Finish the implementation
-                        // You may need to add a new recursive method to do that
+			result = new ArrayList<Integer>();
+            // Finish the implementation
+            // You may need to add a new recursive method to do that
+			postTraversal(0);
                         
 			return result;
 		}
