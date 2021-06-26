@@ -45,9 +45,29 @@ public class is_bst {
             }
         }
 
-        boolean isBinarySearchTree() {
-          // Implement correct algorithm here
-          return true;
+        boolean solve() {
+            if (nodes == 0) {
+                return true;
+            }
+            return isBST(tree[0], Integer.MIN_VALUE, Integer.MAX_VALUE);
+        }
+
+        private boolean isBST(Node root, int min, int max) {
+            // Implement correct algorithm here
+            if (root.key < min || root.key > max) {
+                return false;
+            }
+            if (root.left == -1 && root.right == -1) {
+                return true;
+            }
+            if (root.left == -1) {
+                return isBST(tree[root.right], root.key + 1, max);
+            }
+            if (root.right == -1) {
+                return isBST(tree[root.left], min, root.key - 1);
+            }
+            return (isBST(tree[root.left], min, root.key - 1) &&
+                    isBST(tree[root.right], root.key + 1, max));
         }
     }
 
